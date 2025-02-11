@@ -9,13 +9,8 @@ export class SearchController {
     const userEmail = req.user.email;
 
     try {
-      // console.log('Received search request:', { query, userEmail });
-
       const user = await UserService.getOrCreateUser(userEmail);
-      // console.log('User retrieved or created:', user);
-
       const hasCredits = await UserService.checkAndHandleCredits(user);
-      // console.log('User has credits:', hasCredits);
 
       if (!hasCredits) {
         return res.status(403).json({ 
@@ -24,12 +19,15 @@ export class SearchController {
       }
 
       const matches = await SearchService.findMatches(query);
-      // console.log('Matches found:', matches);
 
+      if (matches.length === 0) {
+        return res.json({ matches: [], message: 'No results found' });
+      }
+
+      const aiResponse = await getAIResponseFromGemini(query, matches);
       await UserService.deductCredit(user._id.toString());
-      // console.log('Credit deducted for user:', user._id);
 
-      return res.json({ matches });
+      return res.json({ matches, response: aiResponse });
     } catch (error) {
       console.error('Search error:', error);
       return res.status(500).json({ error: 'Internal server error' });
@@ -41,13 +39,8 @@ export class SearchController {
     const userEmail = req.user.email;
 
     try {
-      console.log('Received AI response request:', { query, userEmail });
-
       const user = await UserService.getOrCreateUser(userEmail);
-      console.log('User retrieved or created:', user);
-
       const hasCredits = await UserService.checkAndHandleCredits(user);
-      console.log('User has credits:', hasCredits);
 
       if (!hasCredits) {
         return res.status(403).json({ 
@@ -55,15 +48,18 @@ export class SearchController {
         });
       }
 
-      const aiResponse = await getAIResponseFromGemini(query);
-      console.log('AI response:', aiResponse);
+      const matches = await SearchService.findMatches(query);
 
+      if (matches.length === 0) {
+        return res.json({ response: 'No results found' });
+      }
+
+      const aiResponse = await getAIResponseFromGemini(query, matches);
       await UserService.deductCredit(user._id.toString());
-      console.log('Credit deducted for user:', user._id);
 
       return res.json({ response: aiResponse });
     } catch (error) {
-      console.error('AI response error:');
+      console.error('AI response error:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
   }

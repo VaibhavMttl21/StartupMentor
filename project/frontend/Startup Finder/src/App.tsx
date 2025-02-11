@@ -7,12 +7,19 @@ import { ResultsList } from './components/ResultsList';
 import './App.css';
 import { sendEmail } from './Emailsender';
 
+interface Mentor {
+  name: string;
+  type: string;
+  category: string;
+}
+
 function App() {
   const [user, setUser] = useState<User | null>(null);
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Mentor[]>([]);
   const [aiResponse, setAIResponse] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [noResultsMessage, setNoResultsMessage] = useState('');
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -24,12 +31,15 @@ function App() {
   const handleSearch = async (query: string) => {
     setLoading(true);
     setError('');
+    setNoResultsMessage('');
     try {
-      const matches = await searchMentors(query);
-      setResults(matches);
-      console.log("Bettwen ai response")
-      const aiResponse = await getAIResponse(query);
-      setAIResponse(aiResponse);
+      const response = await searchMentors(query);
+      setResults(response.matches);
+      if (response.matches.length === 0) {
+        setNoResultsMessage(response.message || 'No results found');
+      } else {
+        setAIResponse(response.response);
+      }
     } catch (error) {
       setError((error as any).response?.data?.error || 'An error occurred');
     } finally {
@@ -95,6 +105,12 @@ function App() {
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
             {error}
+          </div>
+        )}
+
+        {noResultsMessage && (
+          <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-6">
+            {noResultsMessage}
           </div>
         )}
 

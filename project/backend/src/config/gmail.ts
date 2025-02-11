@@ -15,15 +15,20 @@ export const authenticateGmail = async () => {
     const { client_secret, client_id, redirect_uris } = credentials.installed;
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 
-    const token = {
-      access_token: process.env.ACCESS_TOKEN,
-      refresh_token: process.env.REFRESH_TOKEN,
-      scope: SCOPES.join(' '),
-      token_type: 'Bearer',
-      expiry_date: Date.now() + 3600 * 1000, // 1 hour from now
-    };
+    // Check if we have previously stored a token.
+    if (fs.existsSync(TOKEN_PATH)) {
+      const token = JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf8'));
+      oAuth2Client.setCredentials(token);
 
-    oAuth2Client.setCredentials(token);
+      // Refresh the token if it's expired
+      const newToken = await oAuth2Client.getAccessToken();
+      if (newToken.token) {
+        oAuth2Client.setCredentials({ access_token: newToken.token });
+        fs.writeFileSync(TOKEN_PATH, JSON.stringify(oAuth2Client.credentials));
+      }
+    } else {
+      throw new Error('Token not found. Please authenticate the application.');
+    }
 
     return oAuth2Client;
   } catch (error) {

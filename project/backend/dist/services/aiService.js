@@ -16,7 +16,7 @@ exports.getAIResponseFromGemini = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const getAIResponseFromGemini = (query) => __awaiter(void 0, void 0, void 0, function* () {
+const getAIResponseFromGemini = (query, matches) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -27,20 +27,25 @@ const getAIResponseFromGemini = (query) => __awaiter(void 0, void 0, void 0, fun
     const requestData = {
         contents: [
             {
-                parts: [{ text: query }]
+                parts: [
+                    { text: `User query: ${query}\n\nDatabase matches: ${JSON.stringify(matches, null, 2)}\n\nProvide a suitable response based on the user query and database matches, using plain text formatting without asterisks (*).` }
+                ]
             }
         ]
     };
     try {
-        console.log('Sending request to Gemini API:', query);
+        console.log('Sending request to Gemini API with:', JSON.stringify(requestData, null, 2));
         const response = yield axios_1.default.post(apiUrl, requestData, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         console.log('Received response from Gemini API:', JSON.stringify(response.data, null, 2));
-        const textResponse = (_e = (_d = (_c = (_b = (_a = response.data.candidates) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.content) === null || _c === void 0 ? void 0 : _c.parts) === null || _d === void 0 ? void 0 : _d[0]) === null || _e === void 0 ? void 0 : _e.text;
-        return textResponse ? textResponse.trim() : "No response generated.";
+        // Extract the response text correctly
+        let textResponse = ((_e = (_d = (_c = (_b = (_a = response.data.candidates) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.content) === null || _c === void 0 ? void 0 : _c.parts) === null || _d === void 0 ? void 0 : _d[0]) === null || _e === void 0 ? void 0 : _e.text) || "No response generated.";
+        // Remove asterisks (*) from the response
+        textResponse = textResponse.replace(/\*/g, '').trim();
+        return textResponse;
     }
     catch (error) {
         console.error('Error getting AI response:', ((_f = error.response) === null || _f === void 0 ? void 0 : _f.data) || error.message);

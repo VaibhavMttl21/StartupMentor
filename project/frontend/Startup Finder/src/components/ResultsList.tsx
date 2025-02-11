@@ -8,7 +8,7 @@ interface ResultsListProps {
   results: Mentor[];
 }
 
-export function ResultsList({ results }: ResultsListProps) {
+export function ResultsList({ results = [] }: ResultsListProps) {
   if (results.length === 0) return null;
 
   return (
