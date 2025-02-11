@@ -24,7 +24,7 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 // Middleware
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173', // Replace with your frontend URL
+    origin: [process.env.FRONTEND_URL || ""], // Replace with your frontend URL
     credentials: true
 }));
 app.use(express_1.default.json());
