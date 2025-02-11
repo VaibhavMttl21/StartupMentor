@@ -19,7 +19,7 @@ class UserService {
             if (!user) {
                 user = yield user_1.User.create({
                     email,
-                    credits: 50
+                    credits: 5
                 });
             }
             return user;

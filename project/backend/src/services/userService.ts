@@ -7,7 +7,7 @@ export class UserService {
     if (!user) {
       user = await User.create({
         email,
-        credits: 50
+        credits: 5
       });
     }
     return user;

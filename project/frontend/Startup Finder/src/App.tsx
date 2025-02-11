@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { auth, signInWithGoogle, logout } from './firebase';
 import { User } from 'firebase/auth';
-import { searchMentors, getAIResponse } from './services/api';
+import { searchMentors } from './services/api';
 import { SearchBox } from './components/SearchBox';
 import { ResultsList } from './components/ResultsList';
-import './App.css';
-import { sendEmail } from './Emailsender';
+
 
 interface Mentor {
   name: string;
@@ -65,21 +64,14 @@ function App() {
     }
   };
 
-  const handleSendEmail = async () => {
-    try {
-      await sendEmail();
-      console.log('Email sent successfully');
-    } catch (error) {
-      console.error('Error sending email:', error);
-    }
-  };
+
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
         <button
           onClick={handleLogin}
-          className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600"
+          className="bg-white text-blue-500 px-6 py-3 rounded-lg hover:bg-gray-100 transition duration-300 ease-in-out transform hover:scale-105"
         >
           Sign in with Google
         </button>
@@ -88,16 +80,16 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 p-8">
+      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Startup Finder</h1>
           <button
             onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105"
           >
             Sign Out
           </button>
+          <h1 className="text-3xl font-bold text-blue-500 mx-auto">Startup Mentor Finder</h1>
         </div>
 
         <SearchBox onSearch={handleSearch} loading={loading} />
@@ -117,18 +109,13 @@ function App() {
         <ResultsList results={results} />
 
         {aiResponse && (
-          <div className="bg-white rounded-lg shadow-md p-6 mt-6">
+          <div className="bg-white rounded-lg shadow-md p-6 mt-6 animate-fade-in">
             <h2 className="text-xl font-semibold mb-4">AI Response</h2>
             <p>{aiResponse}</p>
           </div>
         )}
 
-        <button
-          onClick={handleSendEmail}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
-        >
-          Send Test Email
-        </button>
+        
       </div>
     </div>
   );
