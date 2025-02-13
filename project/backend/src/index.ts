@@ -13,10 +13,22 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin:[process.env.FRONTEND_URL||""], // Replace with your frontend URL
+  origin:[process.env.FRONTEND_URL||"","https://backend-l1no.onrender.com"], // Replace with your frontend URL
   credentials: true
 }));
 app.use(express.json());
+
+app.get('/', (req, res) => {
+  fetch('https://backend-l1no.onrender.com',
+    {
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        }
+    }
+    
+) 
+});
 
 // Initialize Firebase
 initializeFirebase();
