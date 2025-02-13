@@ -13,7 +13,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin:[process.env.FRONTEND_URL||"","https://backend-l1no.onrender.com"], // Replace with your frontend URL
+  origin:["http://localhost:5173"], // Replace with your frontend URL
   credentials: true
 }));
 app.use(express.json());
