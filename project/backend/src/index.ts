@@ -13,7 +13,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin:["https://mentorfinder.talkweb.site/"], // Replace with your frontend URL
+  origin:["https://mentorfinder.talkweb.site","http://localhost:5173"], // Replace with your frontend URL
   credentials: true
 }));
 app.use(express.json());
