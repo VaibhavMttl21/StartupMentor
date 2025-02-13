@@ -19,6 +19,7 @@ app.use(cors({
 app.use(express.json());
 
 app.get('/', (req, res) => {
+  setTimeout(() => {
   fetch('https://backend-l1no.onrender.com',
     {
         method: 'GET',
@@ -26,8 +27,10 @@ app.get('/', (req, res) => {
         'Content-Type': 'application/json',
         }
     }
-    
-) 
+) .then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+  },600000);
+  res.send('Server is running');
 });
 
 // Initialize Firebase
