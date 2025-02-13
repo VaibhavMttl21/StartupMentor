@@ -1,9 +1,11 @@
 import admin from 'firebase-admin';
 import dotenv from 'dotenv';
+import { json } from 'stream/consumers';
 
 dotenv.config();
 
-const serviceAccount = require('../../service-account-file.json');
+const serviceAccount = JSON.parse(process.env.SERVICE || "")
+console.log()
 
 export const initializeFirebase = () => {
   admin.initializeApp({

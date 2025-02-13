@@ -7,11 +7,10 @@ dotenv.config();
 
 const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
 const TOKEN_PATH = path.join(__dirname, '../../token.json');
-const CREDENTIALS_PATH = path.join(__dirname, '../../credentials.json');
 
 export const authenticateGmail = async () => {
   try {
-    const credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH, 'utf8'));
+    const credentials = JSON.parse(process.env.CREDENTIALS||"");
     const { client_secret, client_id, redirect_uris } = credentials.installed;
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 
