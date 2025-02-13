@@ -13,25 +13,12 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin:["http://localhost:5173"], // Replace with your frontend URL
+  origin:["https://mentorfinder.talkweb.site/"], // Replace with your frontend URL
   credentials: true
 }));
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  setTimeout(() => {
-  fetch('https://backend-l1no.onrender.com',
-    {
-        method: 'GET',
-        headers: {
-        'Content-Type': 'application/json',
-        }
-    }
-) .then(data => console.log(data))
-.catch(error => console.error('Error:', error));
-  },600000);
-  res.send('Server is running');
-});
+
 
 // Initialize Firebase
 initializeFirebase();
