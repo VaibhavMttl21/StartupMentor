@@ -5,6 +5,11 @@ import { sendCreditExhaustedEmail } from '../config/email';
 
 export const checkForRechargeEmails = async () => {
   const auth = await authenticateGmail();
+  if (!auth) {
+    console.error('Failed to authenticate Gmail');
+    return;
+  }
+
   const gmail = google.gmail({ version: 'v1', auth });
 
   const res = await gmail.users.messages.list({

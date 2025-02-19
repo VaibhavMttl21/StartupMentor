@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
-const TOKEN_PATH = JSON.parse(process.env.TOKEN_PATH || "");
+const TOKEN_PATH = JSON.parse(process.env.TOKEN || "");
 
 export const authenticateGmail = async () => {
   try {
