@@ -6,11 +6,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
-const TOKEN_PATH = path.join(__dirname, '../../token.json');
+const TOKEN_PATH = JSON.parse(process.env.TOKEN_PATH || "");
 
 export const authenticateGmail = async () => {
   try {
-    const credentials = JSON.parse(process.env.CREDENTIALS||"");
+    const credentials = JSON.parse(process.env.CREDENTIALS || "");
     const { client_secret, client_id, redirect_uris } = credentials.installed;
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 
@@ -26,7 +26,8 @@ export const authenticateGmail = async () => {
         fs.writeFileSync(TOKEN_PATH, JSON.stringify(oAuth2Client.credentials));
       }
     } else {
-      throw new Error('Token not found. Please authenticate the application.');
+      console.error('Token not found. Please authenticate the application locally and include the token.json file in your deployment.');
+      return null; // Return null or handle the missing token case appropriately
     }
 
     return oAuth2Client;

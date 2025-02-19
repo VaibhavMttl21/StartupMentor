@@ -70,3 +70,4 @@ node_modules/
 # Add these lines to your .gitignore file
 credentials.json
 service-account-file.json
+token.json
