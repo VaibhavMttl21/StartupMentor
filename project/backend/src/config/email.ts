@@ -16,7 +16,10 @@ export const sendCreditExhaustedEmail = async (userEmail: string, text: string) 
     from: process.env.GMAIL_USER,
     to: userEmail,
     subject: 'Credits Exhausted - Startup Finder',
-    text,
+    html: `
+      <p>${text}</p>
+      <p><a href= "${process.env.BACKEND_URL}/api/check-recharge-emails"  style="display: inline-block; padding: 10px 20px; color: white; background-color: blue; text-decoration: none; border-radius: 5px;">Recharge Credits</a></p>
+    `,
   };
 
   try {

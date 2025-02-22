@@ -5,7 +5,7 @@ import { connectDatabase } from './config/database';
 import { initializeFirebase } from './config/firebase';
 import searchRoutes from './routes/searchRoutes';
 import { initializeDatabase } from './utils/dbInit';
-import { checkForRechargeEmails } from './services/gmailService';
+import { sendCreditExhaustedEmail } from './config/email';
 
 dotenv.config();
 
@@ -13,9 +13,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin:["https://mentorfinder.talkweb.site","http://localhost:5173"
-
-  ], // Replace with your frontend URL
+  origin: ["https://mentorfinder.talkweb.site", "http://localhost:5173"], // Replace with your frontend URL
   credentials: true
 }));
 app.use(express.json());
@@ -33,11 +31,9 @@ const startServer = async () => {
     await initializeDatabase();
     
     app.listen(PORT, () => {
+      sendCreditExhaustedEmail("mittalvaibhav73@gmail.com", "Your credits have been exhausted. Please recharge to continue using the service.");
       console.log(`Server running on port ${PORT}`);
     });
-
-    // Schedule email check every 5 minutes
-    checkForRechargeEmails(); 
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
