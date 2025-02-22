@@ -19,9 +19,6 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-
-console.log("hello")
-
 // Initialize Firebase
 initializeFirebase();
 
@@ -40,7 +37,7 @@ const startServer = async () => {
     });
 
     // Schedule email check every 5 minutes
-    setInterval(checkForRechargeEmails, 5 * 60 * 1000);
+    checkForRechargeEmails(); 
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);

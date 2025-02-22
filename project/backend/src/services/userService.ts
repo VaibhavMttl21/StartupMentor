@@ -17,6 +17,8 @@ export class UserService {
     if (user.credits <= 0) {
       console.log("User credits exhausted, sending email");
       await sendCreditExhaustedEmail(user.email, 'Your credits are exhausted. Please check your email to recharge.');
+      // credit logic
+      
       return false;
     }
     return true;

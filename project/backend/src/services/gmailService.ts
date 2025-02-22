@@ -4,6 +4,7 @@ import { User } from '../models/user';
 import { sendCreditExhaustedEmail } from '../config/email';
 
 export const checkForRechargeEmails = async () => {
+  console.log('Checking for recharge emails...');
   const auth = await authenticateGmail();
   if (!auth) {
     console.error('Failed to authenticate Gmail');
