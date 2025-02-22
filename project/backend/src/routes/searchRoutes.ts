@@ -10,9 +10,14 @@ router.post('/ai-response', authenticateUser, SearchController.getAIResponse);
 
 // New route to check for recharge emails
 router.get('/check-recharge-emails', async (req, res) => {
-  console.log('Checking for recharge emails');
+  console.log("eeee");
+  const userEmail = req.query.email as string;
+  console.log('Checking for recharge emails for:', userEmail);
+  if (!userEmail) {
+    return res.status(400).json({ error: 'Email query parameter is required' });
+  }
   try {
-    await checkForRechargeEmails();
+    await checkForRechargeEmails(userEmail);
     res.status(200).json({ message: 'Checked for recharge emails successfully' });
   } catch (error) {
     console.error('Error checking for recharge emails:', error);
