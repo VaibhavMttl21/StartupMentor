@@ -5,7 +5,7 @@ import { connectDatabase } from './config/database';
 import { initializeFirebase } from './config/firebase';
 import searchRoutes from './routes/searchRoutes';
 import { initializeDatabase } from './utils/dbInit';
-import { sendCreditExhaustedEmail } from './config/email';
+
 
 dotenv.config();
 
