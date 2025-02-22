@@ -31,7 +31,6 @@ const startServer = async () => {
     await initializeDatabase();
     
     app.listen(PORT, () => {
-      sendCreditExhaustedEmail("mittalvaibhav73@gmail.com", "Your credits have been exhausted. Please recharge to continue using the service.");
       console.log(`Server running on port ${PORT}`);
     });
   } catch (error) {
